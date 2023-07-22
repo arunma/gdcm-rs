@@ -49,9 +49,16 @@ fn build() {
     println!("cargo:rustc-link-lib=static=gdcmjpeg16");
     println!("cargo:rustc-link-lib=static=gdcmjpeg8");
     println!("cargo:rustc-link-lib=static=gdcmopenjp2");
-    println!("cargo:rustc-link-lib=static=gdcmuuid");
+    //println!("cargo:rustc-link-lib=static=gdcmuuid");
     println!("cargo:rustc-link-lib=static=gdcmMEXD");
     println!("cargo:rustc-link-lib=static=gdcmzlib");
+
+    let target = env::var("TARGET").expect("TARGET was not set");
+
+    if target.contains("windows-gnu") {
+        println!("cargo:rustc-link-lib=shell32");
+        println!("cargo:rustc-link-lib=uuid");
+    }
 
     // FIXME: OSX ONLY
     println!("Building for {}", env::consts::OS);
@@ -63,6 +70,7 @@ fn build() {
                 "/System/Library/Frameworks"
             );
         }
+
         _ => {
             // Probably not supported
         }
